@@ -44,7 +44,7 @@
 
 | 技術スタック | |
 | ----------- | ----------- |
-| エンジンUnity | (LTS) |
+| エンジン | Unity (LTS) |
 | 言語 | C# |
 | アーキテクチャ | コンポーネントベース ＋ ScriptableObjectデータ層 |
 | バージョン管理 | Git |
@@ -54,5 +54,62 @@
 - ステータス更新におけるイベント駆動とポーリングのトレードオフの実践的な理解
 - UIをデータへの純粋なリアクションとして設計し、ゲーム状態を持たせない構造の重要性
 - 所有権の境界を明確に定義したシステム設計 — チーム開発において特に重要な考え方
+
+プレイ (itch.io): loudcow67.itch.io/rpg-test
+<a name="english"></a>
+# Overview
+This project is a self-directed technical demo designed to practice and demonstrate core RPG gameplay systems from scratch in Unity using C#. The focus was not on art or content, but on writing clean, extensible code for systems that appear in almost every RPG — inventory, equipment, and stat management.
+
+## Systems Implemented
+** Inventory System**
+
+- Slot-based item container with configurable capacity
+- Items are represented as ScriptableObject data assets, separating data from logic
+- Supports stackable and non-stackable item types
+- Full add / remove / swap / drop operations
+- Inventory state persists across scene transitions
+
+**Equipment System**
+
+- Slot-typed equipping (Weapon, Armour, Accessory) with validation logic
+- Equipping/unequipping an item automatically updates character stats
+- Prevents invalid equips (e.g. equipping two weapons simultaneously)
+- Clean separation between the equipment manager and the stat system — changes propagate via event callbacks, not direct coupling
+
+**Character Stat System**
+
+- Stats (HP, ATK, DEF, SPD) stored as a base value + modifier stack
+- Equipment applies additive and multiplicative modifiers independently
+- Modifiers are removed cleanly on unequip with no stat drift
+- Extensible design: new stat types can be added without modifying existing logic
+
+**UI Layer**
+
+- Inventory grid rendered dynamically from item data
+- Tooltips display item stats and comparison delta vs. currently equipped item
+- Equipment panel reflects live stat changes on equip/unequip
+
+## Architecture & Design Decisions
+| Pattern | Where Used |
+| ----------- | ----------- |
+| ScriptableObject (Data Container) | Item definitions — decouples data from MonoBehaviour logic |
+| Observer /  Event System | Stat updates triggered by equipment changes without tight coupling |
+| Singleton | GameManager for global state access |
+| Single Responsibility | Inventory, Equipment, and Stats are separate managers with no cross-dependency |
+
+The stat modifier stack was the most interesting design challenge — ensuring modifiers could be applied and removed in any order without leaving residual values required tracking modifiers by source rather than recalculating from scratch each time.
+
+| Technical Stack| |
+| ----------- | ----------- |
+| Engine | Unity (LTS) |
+| Language | C# |
+| Architecture | Component-based with ScriptableObject data layer |
+| Version Control | Git |
+
+## What I Learned
+- How to design a data-driven item system that is easy to extend without touching existing code
+- The practical tradeoffs between event-driven vs. polling approaches for stat updates
+- How to structure UI so it is purely reactive to underlying data rather than owning any game state
+- The importance of writing systems with clear ownership boundaries — a lesson directly applicable to team-based game development
 
 プレイ (itch.io): loudcow67.itch.io/rpg-test
