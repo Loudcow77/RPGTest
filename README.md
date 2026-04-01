@@ -113,5 +113,3 @@ The stat modifier stack was the most interesting design challenge — ensuring m
 - The practical tradeoffs between event-driven vs. polling approaches for stat updates
 - How to structure UI so it is purely reactive to underlying data rather than owning any game state
 - The importance of writing systems with clear ownership boundaries — a lesson directly applicable to team-based game development
-
-プレイ (itch.io): loudcow67.itch.io/rpg-test
